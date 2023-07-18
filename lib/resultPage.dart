@@ -4,35 +4,41 @@ import 'package:flutter/services.dart';
 
 import 'main.dart';
 
-class resultPage extends StatefulWidget {
-  int totalscore = 0;
+class ScoreScreen extends StatefulWidget {
 
-  resultPage( int score) {
-    totalscore = score;
-  }
+   const ScoreScreen( this.ans, {super.key});
+
+  final List<dynamic> ans;
 
   @override
-  State<resultPage> createState() => _resultPageState();
+  State<ScoreScreen> createState() => _ScoreScreenState(ans);
 }
 
-class _resultPageState extends State<resultPage> {
+class _ScoreScreenState extends State<ScoreScreen> {
 
   late ConfettiController _controller;
+  int totalScore=0;
+  late List<dynamic> answer;
+  _ScoreScreenState(List<dynamic> ans){
+    answer=ans;
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    calculateScore(answer);
     _controller = ConfettiController(duration: const Duration(seconds: 10));
     _controller.play();
   }
 
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => _pop(),
@@ -60,7 +66,7 @@ class _resultPageState extends State<resultPage> {
                           gravity: 0.1
                       ),
                     ),
-                    SizedBox(height: 300,),
+                    const SizedBox(height: 300,),
                     Text("Hello ${MyHomePageState.name.text.toString()}",
                       style: const TextStyle(
                           fontSize: 26,
@@ -72,7 +78,7 @@ class _resultPageState extends State<resultPage> {
                     ),
                     const SizedBox(height: 5,), //Text
                     Text(
-                      'Your Score is ' '${widget.totalscore}',
+                      'Your Score is ' '$totalScore',
                       style: const TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -82,17 +88,17 @@ class _resultPageState extends State<resultPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    if (widget.totalscore == 9 ||
-                        widget.totalscore == 10) const Text(
+                    if (totalScore == 9 ||
+                        totalScore == 10) const Text(
                         '😇', style: TextStyle(fontSize: 40,decoration: TextDecoration.none)),
-                    if (widget.totalscore == 7 ||
-                        widget.totalscore == 8) const Text(
+                    if (totalScore == 7 ||
+                        totalScore == 8) const Text(
                         '😀', style: TextStyle(fontSize: 40,decoration: TextDecoration.none)),
-                    if (widget.totalscore >= 4 &&
-                        widget.totalscore <= 6) const Text(
+                    if (totalScore >= 4 &&
+                        totalScore <= 6) const Text(
                         '😔', style: TextStyle(fontSize: 40,decoration: TextDecoration.none)),
-                    if (widget.totalscore >= 0 &&
-                        widget.totalscore <= 3) const Text(
+                    if (totalScore >= 0 &&
+                        totalScore <= 3) const Text(
                         '😭', style: TextStyle(fontSize: 40,decoration: TextDecoration.none)),
                     const SizedBox(
                       height: 20,
@@ -108,9 +114,6 @@ class _resultPageState extends State<resultPage> {
                                     title: '',
                                   )));
                         },
-                        child: Text(
-                          'Restart',
-                        ),
                         style: ButtonStyle(
                           textStyle: MaterialStateProperty.all(const TextStyle(
                               fontSize: 25, fontWeight: FontWeight.w500)),
@@ -131,16 +134,16 @@ class _resultPageState extends State<resultPage> {
                               borderRadius: BorderRadius.circular(24),
                             ),
                           ),
+                        ),
+                        child: const Text(
+                          'Restart',
                         )),
-                   SizedBox(height: 5,),
+                   const SizedBox(height: 5,),
                     TextButton(
                         onPressed: () {
                           _controller.stop();
                           _pop();
                         },
-                        child: Text(
-                          'Exit',
-                        ),
                         style: ButtonStyle(
                           textStyle: MaterialStateProperty.all(const TextStyle(
                               fontSize: 25, fontWeight: FontWeight.w500)),
@@ -161,6 +164,9 @@ class _resultPageState extends State<resultPage> {
                               borderRadius: BorderRadius.circular(24),
                             ),
                           ),
+                        ),
+                        child: const Text(
+                          'Exit',
                         )),
                   ],),
               ),
@@ -172,5 +178,14 @@ class _resultPageState extends State<resultPage> {
   Future<bool> _pop() async{
     SystemNavigator.pop();
     return true;
+  }
+
+  void calculateScore(List<dynamic>ans) {
+    for(int i=0;i<ans.length;i++){
+      debugPrint("i=$i and ans[i]=${ans[i]}");
+      if(ans[i]==true){
+        totalScore++;
+      }
+    }
   }
 }

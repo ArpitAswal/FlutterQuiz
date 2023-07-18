@@ -71,8 +71,8 @@ Play(
   Play(
     'Q9. In Flutter, which of the following is used as identifiers for widgets, elements, and semantic nodes?',
       {'Buttons': false,
-        'Widgets': true,
-        'Keys': false,
+        'Widgets': false,
+        'Keys': true,
         'Streams': false,
       }
       ),
